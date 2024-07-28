@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Doctors</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .search-container {
+            width: 50%;
+            margin: 100px auto;
+            text-align: center;
+        }
+        .search-container input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        .search-results {
+            margin-top: 20px;
+        }
+        .search-results p {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <a href="patient-details.html">Home</a>
+            <a href="search.html">Search</a>
+            <a href="#">Patient History</a>
+            <a href="doctors-list.html">Doctors List</a>
+            <a href="#">Appointments</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="index.html">Logout</a>
+        </div>
+    </nav>
+
+    <div class="search-container">
+        <h2>Search Doctors</h2>
+        <input type="text" id="search-bar" placeholder="Enter doctor's name" oninput="searchDoctors()">
+        <div id="search-results" class="search-results"></div>
+    </div>
+
+    <script>
+        const doctors = [
+            { name: 'Dr. Alice Smith', specialization: 'Cardiologist', experience: '10 years', contact: 'alice.smith@example.com' },
+            { name: 'Dr. Bob Johnson', specialization: 'Dermatologist', experience: '8 years', contact: 'bob.johnson@example.com' },
+            { name: 'Dr. Carol White', specialization: 'Neurologist', experience: '12 years', contact: 'carol.white@example.com' }
+        ];
+
+        function searchDoctors() {
+            const query = document.getElementById('search-bar').value.toLowerCase();
+            const results = doctors.filter(doctor => doctor.name.toLowerCase().includes(query));
+            displayResults(results);
+        }
+
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = '';
+
+            if (results.length > 0) {
+                results.forEach(doctor => {
+                    const resultItem = document.createElement('p');
+                    resultItem.textContent = `${doctor.name} - ${doctor.specialization} (${doctor.experience})`;
+                    resultsContainer.appendChild(resultItem);
+                });
+            } else {
+                resultsContainer.innerHTML = '<p>No doctors found</p>';
+            }
+        }
+    </script>
+</body>
+</html>
