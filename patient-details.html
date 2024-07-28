@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-image: url("Home-Page-Banner1.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #333;
+            padding: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure navbar stays on top */
+        }
+        .navbar a {
+            color: grey;
+            text-decoration: none;
+            padding: 14px 20px;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 100px;
+            text-align: center;
+        }
+        .container h2 {
+            margin-bottom: 20px;
+        }
+        .container form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container label {
+            margin-bottom: 5px;
+            align-self: flex-start;
+        }
+        .container input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .container button {
+            padding: 10px 20px;
+            border-radius: 3px;
+            border: none;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background-color: #555;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                margin-top: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <a href="patient-details.html">Home</a>
+            <a href="search.html">Search</a>
+            <a href="patient-history.html">Patient History</a>
+            <a href="doctors-list.html">Doctors List</a>
+            <a href="appointments.html">Appointments</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="#" id="logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Patient Details</h2>
+        <form id="patient-details-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" min="1" required>
+
+            <label for="gender">Gender:</label>
+            <input type="text" id="gender" name="gender" required>
+
+            <label for="contact">Contact:</label>
+            <input type="tel" id="contact" name="contact" pattern="[0-9]{10}" required>
+
+            <label for="doctor">Doctor Name:</label>
+            <input type="text" id="doctor" name="doctor" required>
+
+            <label for="time-slot">Appointment Time Slot:</label>
+            <input type="text" id="time-slot" name="time-slot" required>
+
+            <button type="button" onclick="saveDetailsAndProceed()">Next</button>
+        </form>
+    </div>
+
+    <script>
+        function saveDetailsAndProceed() {
+            // Get form values
+            const name = document.getElementById('name').value.trim();
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value.trim();
+            const contact = document.getElementById('contact').value.trim();
+            const doctor = document.getElementById('doctor').value.trim();
+            const timeSlot = document.getElementById('time-slot').value.trim();
+
+            // Validate the form values
+            if (!name || !age || !gender || !contact || !doctor || !timeSlot) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Save to local storage
+            localStorage.setItem('patientName', name);
+            localStorage.setItem('patientAge', age);
+            localStorage.setItem('patientGender', gender);
+            localStorage.setItem('patientContact', contact);
+            localStorage.setItem('doctorName', doctor);
+            localStorage.setItem('appointmentTimeSlot', timeSlot);
+
+            // Add appointment details to the appointments list
+            const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+            appointments.push({
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+                doctor: doctor,
+                notes: `Appointment for ${name} with Dr. ${doctor} at ${timeSlot}`
+            });
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+
+            // Redirect to appointments page
+            window.location.href = 'appointments.html';
+        }
+
+        // Add event listener to logout link
+        document.getElementById('logout').addEventListener('click', function() {
+            // Clear local storage
+            localStorage.clear();
+            // Redirect to signin page
+            window.location.href = 'signin.html';
+        });
+    </script>
+</body>
+</html>
