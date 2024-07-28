@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin Page</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js"></script>
+    <style>
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: #333;
+            padding: 5px;
+        }
+        .navbar img {
+            height: 50px;
+            margin-right: 20px;
+        }
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .container {
+            padding: 20px;
+        }
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        form label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <img src="logo1.jpg" alt="Company Logo">
+            <a href="chatbot.html">Chatbot</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="contact-us.html">Contact Us</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Sign in</h1>
+        <form id="signin-form" aria-label="Signin Form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Signin</button>
+        </form>
+        <p>Don't have an account? <a href="signup.html">Signup</a></p>
+    </div>
+
+    <script>
+        document.getElementById('signin-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Basic validation (you may want to replace this with real authentication logic)
+            const storedUsername = localStorage.getItem('username');
+            const storedPassword = localStorage.getItem('password');
+            if (username === storedUsername && password === storedPassword) {
+                alert('Signin successful! Redirecting to patient details page...');
+                window.location.href = 'patient-details.html';
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+    </script>
+</body>
+</html>
