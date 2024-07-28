@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-image: url("Home-Page-Banner1.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #333;
+            padding: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .navbar a {
+            color: grey;
+            text-decoration: none;
+            padding: 14px 20px;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .container h2 {
+            margin-bottom: 20px;
+        }
+        .container p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .container span {
+            font-weight: bold;
+        }
+        .container .no-data {
+            color: #ff0000;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <a href="patient-details.html">Home</a>
+            <a href="search.html">Search</a>
+            <a href="#">Patient History</a>
+            <a href="doctors-list.html">Doctors List</a>
+            <a href="appointments.html">Appointments</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="index.html">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Appointment Details</h2>
+        <p>Name: <span id="patient-name">Loading...</span></p>
+        <p>Age: <span id="patient-age">Loading...</span></p>
+        <p>Gender: <span id="patient-gender">Loading...</span></p>
+        <p>Contact: <span id="patient-contact">Loading...</span></p>
+        <p>Doctor Name: <span id="doctor-name">Loading...</span></p>
+        <p>Appointment Time Slot: <span id="appointment-time-slot">Loading...</span></p>
+        <p class="no-data" id="no-data" style="display: none;">No appointment details available.</p>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const name = localStorage.getItem('patientName');
+            const age = localStorage.getItem('patientAge');
+            const gender = localStorage.getItem('patientGender');
+            const contact = localStorage.getItem('patientContact');
+            const doctor = localStorage.getItem('doctorName');
+            const timeSlot = localStorage.getItem('appointmentTimeSlot');
+
+            if (name && age && gender && contact && doctor && timeSlot) {
+                document.getElementById('patient-name').textContent = name;
+                document.getElementById('patient-age').textContent = age;
+                document.getElementById('patient-gender').textContent = gender;
+                document.getElementById('patient-contact').textContent = contact;
+                document.getElementById('doctor-name').textContent = doctor;
+                document.getElementById('appointment-time-slot').textContent = timeSlot;
+            } else {
+                document.getElementById('no-data').style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>
