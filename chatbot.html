@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Chatbot</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f7fa; /* Background color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Prevents scrollbar on body */
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5em; /* Larger font size for header */
+        }
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f4f4f9;
+        }
+        .message {
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 20px;
+            max-width: 75%;
+            word-wrap: break-word;
+            font-size: 1em; /* Consistent font size */
+        }
+        .message.user {
+            background-color: #e0ffe0;
+            align-self: flex-end;
+            border-top-right-radius: 0;
+        }
+        .message.bot {
+            background-color: #ffe0e0;
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+        .input-container {
+            display: flex;
+            border-top: 1px solid #ddd;
+            background-color: #fff; /* Ensure input container matches the chat container */
+        }
+        .input-container input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            font-size: 1em;
+            outline: none;
+        }
+        .input-container button {
+            padding: 15px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">Health Chatbot</div>
+        <div class="messages" id="messages"></div>
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Type a symptom...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const predefinedKeywords = {
+            // Your predefined keywords and responses...
+            "headache": "Take a rest, drink plenty of water, and consider taking a pain reliever like ibuprofen or acetaminophen.",
+            "fever": "Stay hydrated, rest, and take over-the-counter fever reducers like acetaminophen or ibuprofen.",
+            "cold": "Rest, stay hydrated, and use over-the-counter cold remedies like decongestants or cough syrups.",
+            "cough": "Stay hydrated, use a humidifier, and consider over-the-counter cough medicines or throat lozenges.",
+            "sore throat": "Gargle with warm salt water, stay hydrated, and use throat lozenges or sprays.",
+            "stomach ache": "Avoid solid foods, drink clear fluids, and rest. Over-the-counter antacids or anti-gas medications may help.",
+            "nausea": "Try ginger tea or ginger ale, eat small meals, and avoid strong odors.",
+            "vomiting": "Rest, drink clear fluids in small sips, and avoid solid food until you feel better.",
+            "diarrhea": "Stay hydrated with clear fluids, avoid dairy and fatty foods, and consider over-the-counter anti-diarrheal medications.",
+            "constipation": "Increase fiber intake, drink plenty of water, and exercise regularly. Consider over-the-counter laxatives if necessary.",
+            "allergy": "Avoid allergens, take antihistamines, and use nasal sprays or eye drops if needed.",
+            "insomnia": "Maintain a regular sleep schedule, avoid caffeine and electronics before bed, and consider over-the-counter sleep aids.",
+            "back pain": "Apply heat or cold packs, rest, and use over-the-counter pain relievers. Consider gentle stretching exercises.",
+            "muscle pain": "Rest the affected area, apply ice, and use over-the-counter pain relievers. Gentle stretching may help.",
+            "fatigue": "Ensure adequate rest, maintain a balanced diet, and manage stress effectively.",
+            "anxiety": "Practice relaxation techniques, exercise regularly, and consider speaking with a mental health professional.",
+            "depression": "Reach out to a mental health professional, stay connected with loved ones, and engage in activities you enjoy.",
+            "dizziness": "Sit or lie down until the feeling passes, stay hydrated, and avoid sudden movements.",
+            "shortness of breath": "Rest, practice deep breathing exercises, and seek medical attention if it persists or worsens.",
+            "chest pain": "Rest and seek immediate medical attention if the pain is severe or accompanied by other symptoms like shortness of breath.",
+            "skin rash": "Avoid scratching, use soothing lotions or creams, and consider antihistamines for itching.",
+            "itchy skin": "Keep the skin moisturized, avoid hot showers, and use anti-itch creams or antihistamines.",
+            "ear pain": "Apply a warm compress, avoid inserting objects into the ear, and consider over-the-counter pain relievers.",
+            "toothache": "Rinse your mouth with warm salt water, use a cold compress, and take over-the-counter pain relievers.",
+            "eye pain": "Rest your eyes, avoid straining them, and use lubricating eye drops.",
+            "nosebleed": "Sit upright, lean forward, and pinch your nose. Apply a cold compress if needed.",
+            "heartburn": "Avoid spicy and fatty foods, eat smaller meals, and consider over-the-counter antacids.",
+            "indigestion": "Eat slowly, avoid lying down after meals, and consider over-the-counter antacids.",
+            "acne": "Keep your skin clean, avoid picking at pimples, and use over-the-counter acne treatments.",
+            "sunburn": "Apply aloe vera gel, stay hydrated, and avoid further sun exposure.",
+            "dry skin": "Use moisturizers, avoid hot showers, and consider using a humidifier.",
+            "hair loss": "Ensure a balanced diet, avoid harsh hair treatments, and consider over-the-counter hair growth products.",
+            "joint pain": "Rest, apply heat or cold packs, and use over-the-counter pain relievers. Gentle exercise may help.",
+            "high blood pressure": "Maintain a healthy diet, exercise regularly, and avoid excessive salt and alcohol.",
+            "high cholesterol": "Eat a heart-healthy diet, exercise regularly, and avoid trans fats and saturated fats.",
+            "diabetes": "Monitor blood sugar levels, maintain a balanced diet, and exercise regularly. Follow your healthcare provider's advice.",
+            "asthma": "Avoid triggers, use prescribed inhalers, and follow your asthma action plan.",
+            "bronchitis": "Rest, stay hydrated, and use a humidifier. Consider over-the-counter cough medicines.",
+            "pneumonia": "Seek medical attention, rest, stay hydrated, and follow your healthcare provider's advice.",
+            "flu": "Rest, stay hydrated, and use over-the-counter medications to relieve symptoms.",
+            "sinusitis": "Stay hydrated, use a humidifier, and consider over-the-counter decongestants.",
+            "migraine": "Rest in a dark, quiet room, apply a cold compress, and take prescribed medications.",
+            "food poisoning": "Stay hydrated, rest, and avoid solid foods until you feel better.",
+            "ulcer": "Avoid spicy foods, alcohol, and smoking. Follow your healthcare provider's advice on medications.",
+            "gallstones": "Follow a low-fat diet, stay hydrated, and seek medical attention for severe pain.",
+            "hepatitis": "Rest, avoid alcohol, and follow your healthcare provider's advice on medications and diet.",
+            "kidney stones": "Stay hydrated, take pain relievers, and seek medical attention if the pain is severe.",
+            "urinary tract infection": "Stay hydrated, avoid irritants, and take prescribed antibiotics.",
+            "menstrual cramps": "Use heat packs, take over-the-counter pain relievers, and practice relaxation techniques.",
+            "menopause": "Maintain a healthy diet, exercise regularly, and consider hormone replacement therapy if advised by your healthcare provider.",
+            "osteoporosis": "Ensure adequate calcium and vitamin D intake, exercise regularly, and avoid smoking and excessive alcohol.",
+            "arthritis": "Stay active, use heat or cold packs, and take prescribed or over-the-counter pain relievers.",
+            "obesity": "Maintain a balanced diet, exercise regularly, and consider speaking with a healthcare provider for guidance.",
+            "anemia": "Increase iron-rich foods in your diet, take prescribed supplements, and follow your healthcare provider's advice.",
+            "hypothyroidism": "Take prescribed medications, maintain a balanced diet, and follow your healthcare provider's advice."
+        };
+
+        function sendMessage() {
+            const userInput = document.getElementById('userInput').value.toLowerCase().trim();
+            if (userInput) {
+                addMessage(userInput, 'user');
+                const response = predefinedKeywords[userInput] || "Sorry, I don't have information on that symptom. Please consult a healthcare professional.";
+                addMessage(response, 'bot');
+                document.getElementById('userInput').value = '';
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            messageDiv.textContent = text;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>
