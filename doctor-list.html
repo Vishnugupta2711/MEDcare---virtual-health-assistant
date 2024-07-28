@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors List</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-image: url("Home-Page-Banner1.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #333;
+            padding: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure navbar stays on top */
+        }
+        .navbar a {
+            color: grey;
+            text-decoration: none;
+            padding: 14px 20px;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 100px;
+            text-align: center;
+        }
+        .doctor-card {
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .doctor-card:last-child {
+            border-bottom: none;
+        }
+        .doctor-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+        .doctor-card p {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                margin-top: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <a href="patient-details.html">Home</a>
+            <a href="#">Search</a>
+            <a href="#">Patient History</a>
+            <a href="doctors-list.html">Doctors List</a>
+            <a href="#">Appointments</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="index.html">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Doctors List</h2>
+        <div class="doctor-card">
+            <h3>Dr. Alina Smithi</h3>
+            <p>Specialization: Cardiologist</p>
+            <p>Experience: 10 years</p>
+            <p>Contact: alice.smith@example.com</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Bobby Jaikumar</h3>
+            <p>Specialization: Dermatologist</p>
+            <p>Experience: 8 years</p>
+            <p>Contact: bob.johnson@example.com</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Daroga Buety</h3>
+            <p>Specialization: Neurologist</p>
+            <p>Experience: 12 years</p>
+            <p>Contact: carol.white@example.com</p>
+        </div>
+    </div>
+</body>
+</html>
