@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient History</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        .container {
+            padding: 100px;
+            margin-top: 100px;
+        }
+        table {
+            width: 100%;
+            justify-items: center;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <a href="patient-details.html">Home</a>
+            <a href="search.html">Search</a>
+            <a href="patient-history.html">Patient History</a>
+            <a href="doctors-list.html">Doctors List</a>
+            <a href="appointments.html">Appointments</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="signin.html" id="logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Patient History</h1>
+        <table id="history-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Doctor</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Appointment rows will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableBody = document.querySelector('#history-table tbody');
+            const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+
+            appointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${appointment.date}</td>
+                    <td>${appointment.time}</td>
+                    <td>${appointment.doctor}</td>
+                    <td>${appointment.notes}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        });
+
+        document.getElementById('logout').addEventListener('click', function() {
+            localStorage.clear();
+        });
+    </script>
+</body>
+</html>
